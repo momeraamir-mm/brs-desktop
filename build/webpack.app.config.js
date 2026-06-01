@@ -18,6 +18,11 @@ module.exports = (env) => {
   let fileApi = libraryName + ".api.js";
   let fileWrk = libraryName + ".worker.js";
   let fileExt = libraryName + "-sg.js";
+  // Source the engine from our LOCAL brs-engine workspace (the overhauled engine),
+  // not the npm brs-engine/brs-scenegraph packages. Sibling layout: brs/brs-engine.
+  const localBrowserLib = path.resolve(__dirname, "../../brs-engine/packages/browser/lib");
+  const localSgLib = path.resolve(__dirname, "../../brs-engine/packages/scenegraph/lib");
+  const localSgRoot = path.resolve(__dirname, "../../brs-engine/packages/scenegraph");
   return [
     merge(base(env), {
       entry: {
@@ -42,10 +47,10 @@ module.exports = (env) => {
             { context: "src/app/", from: "css/**", to: "../app" },
             { context: "src/app/", from: "web/**", to: "../app" },
             { context: "src/app", from: "assets/**", to: "../app" },
-            { context: "node_modules/brs-engine/lib", from: fileApi, to: "lib" },
-            { context: "node_modules/brs-engine/lib", from: fileWrk, to: "lib" },
-            { context: "node_modules/brs-scenegraph/lib", from: fileExt, to: "lib" },
-            { context: "node_modules/brs-scenegraph/", from: "assets/**", to: "../app" },
+            { context: localBrowserLib, from: fileApi, to: "lib" },
+            { context: localBrowserLib, from: fileWrk, to: "lib" },
+            { context: localSgLib, from: fileExt, to: "lib" },
+            { context: localSgRoot, from: "assets/**", to: "../app" },
           ],
         }),
       ],
